@@ -1,0 +1,65 @@
+MODELO FISICO DE DATOS: SCRIPTS
+
+-- Creación de la tabla Usuario
+CREATE TABLE Usuario (
+    id_usuario INT PRIMARY KEY,
+    email VARCHAR(40) NOT NULL,
+    contraseña VARCHAR(20) NOT NULL
+);
+
+
+-- Creación de la tabla Perfil
+CREATE TABLE Perfil (
+    id_perfil INT PRIMARY KEY,
+    id_usuario INT NOT NULL,
+    nombre VARCHAR(20) NOT NULL,
+    apellidos VARCHAR(40) NOT NULL,
+    telefono VARCHAR(9),
+    biografia VARCHAR(60),
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+);
+
+
+-- Creación de la tabla Coche
+CREATE TABLE Coche (
+    id_coche INT PRIMARY KEY,
+    id_perfil INT NOT NULL,
+    marca VARCHAR(20) NOT NULL,
+    modelo VARCHAR(20) NOT NULL,
+    capacidad INT NOT NULL,
+    FOREIGN KEY (id_perfil) REFERENCES Perfil(id_perfil)
+);
+
+
+-- Creación de la tabla Viaje
+CREATE TABLE Viaje (
+    id_viaje INT PRIMARY KEY,
+    dia DATE NOT NULL,
+    lugar_recogida VARCHAR(40) NOT NULL,
+    lugar_llegada VARCHAR(40) NOT NULL,
+    hora_recogida VARCHAR(15),
+    hora_llegada VARCHAR(15),
+    numero_pasajeros INT NOT NULL
+);
+
+
+-- Creación de la tabla Reserva
+CREATE TABLE Reserva (
+    id_reserva INT PRIMARY KEY,
+    id_viaje INT NOT NULL,
+    id_usuario INT NOT NULL,
+    asientos_reservados INT NOT NULL,
+    estatus ENUM('Confirmada', 'Cancelada', 'Pendiente'),
+    FOREIGN KEY (id_viaje) REFERENCES Viaje(id_viaje),
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario)
+);
+
+
+-- Creación de la tabla Crea (relación N:M entre Usuario y Viaje)
+CREATE TABLE Crea (
+    id_usuario INT,
+    id_viaje INT,
+    PRIMARY KEY (id_usuario, id_viaje),
+    FOREIGN KEY (id_usuario) REFERENCES Usuario(id_usuario),
+    FOREIGN KEY (id_viaje) REFERENCES Viaje(id_viaje)
+);
